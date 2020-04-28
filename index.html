@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Impact Analysis</title>
+    <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.js"></script>
+    <script src="../dist/impact-grid.js"></script>
+  </head>
+  <body>
+    <div style="width: 700px; height: 350px;">
+      <frequency-grid
+        init-chart="pie"
+        init-datasource="CRASHES_2010-2019"
+        init-filter1="Year\2019"
+        init-filter2="County\Albany"
+        init-variable="County">
+      </frequency-grid>
+    </div>
+  </body>
+</html>
