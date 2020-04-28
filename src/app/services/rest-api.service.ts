@@ -14,7 +14,7 @@ import { map, tap, retry, catchError } from 'rxjs/operators';
 export class RestApiService {
 
     // Define API
-    apiURL = 'http://localhost:9090/care-rest';
+    apiURL = 'http://dev.itis-app.com/care-rest';
 
     constructor(private http: HttpClient) { }
 
