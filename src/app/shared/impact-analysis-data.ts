@@ -8,5 +8,5 @@ export class ImpactAnalysisData {
     cumulativePercent1: number;
     overRepresented: number;
     maxGain: number;
-    significant: boolean;
+    isSignificant: boolean;
 }

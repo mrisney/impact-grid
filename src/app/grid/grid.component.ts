@@ -25,10 +25,14 @@ import { StatusBarPanelComponent } from '../status-bar-panel/status-bar-panel.co
             <select style="margin-left: 10px; margin-bottom: 10px; width: 180px" class="ag-theme-balham" formControlName="filter2Control" (change)="onFilter2Change($event.target.value)">
                 <option *ngFor="let item of filter2" value={{item.filter}}>{{item.filter}}</option>
             </select>
-
-            <label style="margin-left: 10px; margin-bottom: 10px;" class="ag-theme-balham">Supress Nulls ?
-                <input (change)="onNullableChange($event)" value="isNullable" type="checkbox"/>
-            </label>
+            <div style="margin-left: 10px; margin-bottom: 10px;display: block;">
+                <label class="ag-theme-balham">Supress Nulls ?
+                    <input (change)="onNullableChange($event)" value="isNullable" type="checkbox"/>
+                </label>
+                <label style="margin-left: 10px;" class="ag-theme-balham">No Zeros ?
+                    <input (change)="onNoZeroChange($event)" value="zeros" type="checkbox"/>
+                </label>
+            </div>
         </form>
         
         <ag-grid-angular 
@@ -87,18 +91,20 @@ export class GridComponent implements OnInit {
         { headerName: 'Other Freq', field: 'frequency2', sortable: true, filter: true },
         { headerName: 'Other Pct', field: 'percent2', sortable: true, filter: true },
         { headerName: 'Over Rep', field: 'overRepresented', sortable: true, filter: true },
-        { headerName: 'Max Gain', field: 'maxGain', sortable: true, filter: true }
+        { headerName: 'Max Gain', field: 'maxGain', sortable: true, filter: true },
+        { headerName: 'Significant', field: 'isSignificant', sortable: true, filter: true }
     ];
     constructor(private fb: FormBuilder, private http: HttpClient, public restApi: RestApiService) {
 
     }
+
+
     ngOnInit() {
 
         this.loadDataSources();
         this.datasource = this.initDatasource;
         this.request = new ImpactAnalysisRequest();
         this.request.dataSourceName = this.datasource;
-
         this.getFilter1();
         this.request.filter1Name = this.initFilter1;
 
@@ -150,6 +156,8 @@ export class GridComponent implements OnInit {
     onGridReady(params) {
         this.gridApi = params.api;
         this.gridColumnApi = params.columnApi;
+        this.gridApi.sizeColumnsToFit()
+
         window.onresize = () => {
             this.autoSizeAll(false);
         }
@@ -157,35 +165,12 @@ export class GridComponent implements OnInit {
 
     onFirstDataRendered(params) {
         console.log('data onFirstDataRendered()...');
-        this.autoSizeAll(false);
-        /*
-        if (this.initChartType) {
-            console.log("chart type = "+this.initChartType);
-            if (this.initChartType === 'pie') {
-                this.pieChart();
-            } else {
-                this.stackedBarChart();
-            }
-        }
-        */
     }
 
     onRowDataChanged(params) {
         console.log('data onRowDataChanged()...');
         this.autoSizeAll(false);
-        /*
-        if (this.initChartType && this.chart) {
-            this.chart.destroyChart();
-            console.log("chart type = "+this.initChartType);
-            if (this.initChartType === 'pie') {
-                this.pieChart();
-            } else {
-                this.stackedBarChart();
-            }
-        }
-        */
     }
-
 
     loadDataSources() {
         return this.restApi.getDataSources().subscribe((data: {}) => {
@@ -227,6 +212,11 @@ export class GridComponent implements OnInit {
         this.getImpactAnalysis();
     }
 
+    onNoZeroChange(value: any) {
+        console.log(value.currentTarget.checked);
+        this.request.noZeros = value.currentTarget.checked;
+        this.getImpactAnalysis();
+    }
     getVariables() {
         return this.restApi.getVariables(this.datasource).subscribe((data: {}) => {
             this.variables = data;

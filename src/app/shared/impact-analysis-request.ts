@@ -4,4 +4,5 @@ export class ImpactAnalysisRequest {
     filter2Name: string;
     variableName: string;
     suppressNulls: boolean;
+    noZeros:boolean;
 }
