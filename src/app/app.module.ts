@@ -41,7 +41,7 @@ export class AppModule implements DoBootstrap {
         const el = createCustomElement(GridComponent, {
             injector: this.injector
         });
-        customElements.define('frequency-grid', el);
+        customElements.define('impact-grid', el);
     }
     
     ngDoBootstrap() {
